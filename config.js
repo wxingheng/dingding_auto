@@ -4,7 +4,7 @@ module.exports = {
     // 上班时间
     go_hour: 9,
     // 下班时间
-    back_hour: 19,
+    back_hour: 18.5,
     // 点击工作
     work_position: [540, 1818],
     // 点击考勤打卡

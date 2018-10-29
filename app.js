@@ -4,9 +4,11 @@ const conf = require('./config');
 shell.echo('hello world');
 
 
-const random = () => (Math.floor(Math.random() * 30) + 15)
+const random = () => (Math.floor(Math.random() * 15) + 30)
+// const random = () => (1)
+
 const get_start_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.go_hour, 'hour').subtract((random()), 'minute').format('YYYY-MM-DD HH:mm');
-const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((random()), 'minute').format('YYYY-MM-DD HH:mm');
+const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((4), 'minute').format('YYYY-MM-DD HH:mm');
 let default_delay = 1000;
 let start_time = get_start_time();
 let last_time = get_last_time();
@@ -119,21 +121,26 @@ const start_work_flow = function () {
 
 // start_work_flow();
 const run = () => {
+    if ((new Date().getHours()) < conf.go_hour) {
+        logs(`下次上班打卡时间 ${start_time}`)
+    } else {
+        logs(`下次下班打卡时间 ${last_time}`)
+    }
     setInterval(() => {
         // 每天重置 打卡时间
-        if(moment().format('YYYY-MM-DD HH:mm') === '23:59:59'){
+        if (moment().format('YYYY-MM-DD HH:mm') === '23:59:59') {
             start_time = get_start_time();
             last_time = get_last_time();
         }
-        if((new Date().getHours()) < conf.go_hour){
+        if ((new Date().getHours()) < conf.go_hour) {
             logs(`下次上班打卡时间 ${start_time}`)
-        }else{
+        } else {
             logs(`下次下班打卡时间 ${last_time}`)
         }
 
-        if(moment().format('YYYY-MM-DD HH:mm') === start_time){
+        if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
             start_work_flow();
-        }else if(moment().format('YYYY-MM-DD HH:mm') === last_time){
+        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
             Work_flow();
         }
     }, 1000 * 60)
