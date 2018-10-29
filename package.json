@@ -1,0 +1,20 @@
+{
+  "name": "dingding_auto",
+  "version": "1.0.0",
+  "description": "钉钉自动打卡",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+  },
+  "keywords": [
+    "dingding",
+    "dd",
+    "node"
+  ],
+  "author": "wuxh",
+  "license": "ISC",
+  "dependencies": {
+    "moment": "^2.22.2",
+    "shelljs": "^0.8.2"
+  }
+}
