@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "description": "钉钉自动打卡",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-  },
+  "scripts": {},
   "keywords": [
     "dingding",
     "dd",
@@ -14,7 +12,9 @@
   "author": "wuxh",
   "license": "ISC",
   "dependencies": {
+    "mime-types": "^2.1.21",
     "moment": "^2.22.2",
+    "nodemailer": "^4.6.8",
     "shelljs": "^0.8.2"
   }
 }

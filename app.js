@@ -1,6 +1,12 @@
 const shell = require('shelljs');
 const moment = require('moment');
 const conf = require('./config');
+const nodemailer = require("nodemailer");
+const fs = require('fs');
+const path = require('path');
+const mineType = require('mime-types');
+
+
 shell.echo('hello world');
 
 
@@ -12,6 +18,7 @@ const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_
 let default_delay = 1000;
 let start_time = get_start_time();
 let last_time = get_last_time();
+let num = 10;
 
 
 const logs = (str) => {
@@ -60,7 +67,6 @@ const open_dd = () => {
 // click_imitate 模拟点击
 const click_imitate = (position) => {
     delay(() => {
-        console.log(`adb shell input tap ${position.map((d) => d)}`.replace(/,/g, ' '));
         shell.exec(`adb shell input tap ${position.map((d) => d)}`.replace(/,/g, ' '));
     })
 }
@@ -91,6 +97,46 @@ const start_work = () => {
 const clear_cache = () => {
     logs('清除缓存');
     default_delay = 1000;
+    num = num + 1;
+}
+
+// 截图 并保存指定路径
+const printscreen = () => {
+    delay(() => {
+        logs('截图并保存');
+        shell.exec(`adb shell screencap -p sdcard/screen${num}.png`);
+        shell.exec(`adb pull sdcard/screen${num}.png E:/study/Electron/Angular-electron/new-hoslink-client-core/DingDingAutoPlayCard/dingding_node/screen`);
+    })
+}
+
+// 发送到邮箱
+const send_email = () => {
+    delay(() => {
+        logs('发送到邮箱');
+ 
+        let filePath = path.resolve(`screen/screen${num}.png`);
+ 
+        let data = fs.readFileSync(filePath);
+        data = new Buffer(data).toString('base64');
+         
+        let base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
+        
+        var transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
+        var mailOptions = {
+            from: `${conf.email}`, //发信邮箱
+            to: `${conf.email}`, //接收者邮箱
+            subject: "打卡截图", //邮件主题
+            text: "Hello！",
+            html: `<h1></h1><img src="${base64}">`
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                return console.log(error);
+            }
+            logs('Message sent: ' + info.response);
+        });
+         
+    })
 }
 
 
@@ -104,6 +150,8 @@ const Work_flow = function () {
     click_work();
     click_check();
     work_off();
+    printscreen();
+    send_email();
 }
 
 // 上班打卡流程
@@ -116,6 +164,8 @@ const start_work_flow = function () {
     click_work();
     click_check();
     start_work();
+    printscreen();
+    send_email();
 }
 
 
@@ -126,23 +176,34 @@ const run = () => {
     } else {
         logs(`下次下班打卡时间 ${last_time}`)
     }
+    Work_flow();
     setInterval(() => {
-        // 每天重置 打卡时间
-        if (moment().format('YYYY-MM-DD HH:mm') === '00:01:00') {
-            start_time = get_start_time();
-            last_time = get_last_time();
-        }
-        if ((new Date().getHours()) < conf.go_hour) {
-            logs(`下次上班打卡时间 ${start_time}`)
-        } else {
-            logs(`下次下班打卡时间 ${last_time}`)
-        }
+        logs(num);
+        Work_flow();
+    }, 1000 * 60 * 3)
+    // setInterval(() => {
+    //     // 每天重置 打卡时间
+    //     if (moment().format('YYYY-MM-DD HH:mm') === '00:01:00') {
+    //         start_time = get_start_time();
+    //         last_time = get_last_time();
+    //     }
+    //     if ((new Date().getHours()) < conf.go_hour) {
+    //         logs(`下次上班打卡时间 ${start_time}`)
+    //     } else {
+    //         logs(`下次下班打卡时间 ${last_time}`)
+    //     }
 
-        if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
-            start_work_flow();
-        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
-            Work_flow();
-        }
-    }, 1000 * 60)
+    //     if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
+    //         start_work_flow();
+    //     } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
+    //         Work_flow();
+    //     }
+    // }, 1000 * 60)
 }
 run();
+
+
+
+
+
+

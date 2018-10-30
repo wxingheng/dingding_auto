@@ -56,8 +56,8 @@ windows版本adb下载地址:
 截屏
 
 ```
-adb shell screencap -p sdcard/screen2.png
-adb pull  sdcard/screen2.png E:\dingding
+adb shell screencap -p sdcard/screen.png
+adb pull  sdcard/screen.png E:\dingding
 ```
 
 ###

@@ -14,5 +14,10 @@ module.exports = {
     // 下班打卡
     work_off: [538, 1223],
     // 步骤延时 
-    step_time: 7000
+    step_time: 7000,
+    // qq邮箱 打卡成功  将只用qq邮箱给自己发一封邮件
+    email: '1228678518@qq.com',
+    // 邮箱密钥
+    email_token: ''
+
 }
