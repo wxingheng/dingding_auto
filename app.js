@@ -128,7 +128,7 @@ const run = () => {
     }
     setInterval(() => {
         // 每天重置 打卡时间
-        if (moment().format('YYYY-MM-DD HH:mm') === '23:59:59') {
+        if (moment().format('YYYY-MM-DD HH:mm') === '00:01:00') {
             start_time = get_start_time();
             last_time = get_last_time();
         }
