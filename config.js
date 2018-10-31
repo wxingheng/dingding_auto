@@ -18,6 +18,5 @@ module.exports = {
     // qq邮箱 打卡成功  将只用qq邮箱给自己发一封邮件
     email: '1228678518@qq.com',
     // 邮箱密钥
-    email_token: ''
-
+    email_token: 'dzurdbumhdlgichd'
 }

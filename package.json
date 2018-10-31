@@ -12,6 +12,7 @@
   "author": "wuxh",
   "license": "ISC",
   "dependencies": {
+    "baidu-aip-sdk": "^2.3.3",
     "mime-types": "^2.1.21",
     "moment": "^2.22.2",
     "nodemailer": "^4.6.8",

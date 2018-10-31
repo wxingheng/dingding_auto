@@ -6,6 +6,43 @@ const fs = require('fs');
 const path = require('path');
 const mineType = require('mime-types');
 
+var AipOcrClient = require("baidu-aip-sdk").ocr;
+// 设置APPID/AK/SK
+var APP_ID = "14617464";
+var API_KEY = "pxUG2m2KBbN9eq9EhZxhaRc2";
+var SECRET_KEY = "kmWAi5qmsIs6aH4GkWHvZVq9bUBKkRAy";
+
+// 新建一个对象，建议只保存一个对象调用服务接口
+var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
+
+var HttpClient = require("baidu-aip-sdk").HttpClient;
+
+// 设置request库的一些参数，例如代理服务地址，超时时间等
+// request参数请参考 https://github.com/request/request#requestoptions-callback
+HttpClient.setRequestOptions({
+    timeout: 5000
+});
+
+// 也可以设置拦截每次请求（设置拦截后，调用的setRequestOptions设置的参数将不生效）,
+// 可以按需修改request参数（无论是否修改，必须返回函数调用参数）
+// request参数请参考 https://github.com/request/request#requestoptions-callback
+HttpClient.setRequestInterceptor(function (requestOptions) {
+    // 查看参数
+    // console.log(requestOptions)
+    // 修改参数
+    requestOptions.timeout = 5000;
+    // 返回参数
+    return requestOptions;
+});
+
+
+
+
+
+
+
+
+
 
 shell.echo('hello world');
 
@@ -14,7 +51,7 @@ const random = () => (Math.floor(Math.random() * 15) + 30)
 // const random = () => (1)
 
 const get_start_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.go_hour, 'hour').subtract((random()), 'minute').format('YYYY-MM-DD HH:mm');
-const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((4), 'minute').format('YYYY-MM-DD HH:mm');
+const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((1), 'minute').format('YYYY-MM-DD HH:mm');
 let default_delay = 1000;
 let start_time = get_start_time();
 let last_time = get_last_time();
@@ -113,31 +150,39 @@ const printscreen = () => {
 const send_email = () => {
     delay(() => {
         logs('发送到邮箱');
- 
         let filePath = path.resolve(`screen/screen${num}.png`);
- 
-        let data = fs.readFileSync(filePath);
-        data = new Buffer(data).toString('base64');
-         
-        let base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + data;
-        
-        var transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
-        var mailOptions = {
-            from: `${conf.email}`, //发信邮箱
-            to: `${conf.email}`, //接收者邮箱
-            subject: "打卡截图", //邮件主题
-            text: "Hello！",
-            html: `<h1></h1><img src="${base64}">`
-        };
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                return console.log(error);
-            }
-            logs('Message sent: ' + info.response);
+        let image = fs.readFileSync(filePath);
+        let text = '';
+        image = new Buffer(image).toString('base64');
+        // 调用通用文字识别, 图片参数为本地图片
+        client.generalBasic(image).then(function (result) {
+            // console.log(JSON.stringify(result));
+            const v = result.words_result.filter(d => d.words.search('打卡时间') !== -1);
+            console.log(JSON.stringify(result.words_result.filter(d => d.words.search('打卡时间') !== -1)));
+            console.log(JSON.stringify(result.words_result));
+            text = v.map(d => d.words);
+            let base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + image;
+            var transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
+            var mailOptions = {
+                from: `${conf.email}`, //发信邮箱
+                to: `${conf.email}`, //接收者邮箱
+                subject: "打卡截图", //邮件主题
+                text: "Hello！",
+                html: `<p>${text}</p><img src="${base64}">`
+            };
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    return console.log(error);
+                }
+                logs('Message sent: ' + info.response);
+            });
+        }).catch(function (err) {
+            // 如果发生网络错误
+            console.log(err);
         });
-         
     })
 }
+
 
 
 // 下班打卡流程
@@ -176,34 +221,28 @@ const run = () => {
     } else {
         logs(`下次下班打卡时间 ${last_time}`)
     }
-    Work_flow();
-    setInterval(() => {
-        logs(num);
-        Work_flow();
-    }, 1000 * 60 * 3)
+    // Work_flow();
     // setInterval(() => {
-    //     // 每天重置 打卡时间
-    //     if (moment().format('YYYY-MM-DD HH:mm') === '00:01:00') {
-    //         start_time = get_start_time();
-    //         last_time = get_last_time();
-    //     }
-    //     if ((new Date().getHours()) < conf.go_hour) {
-    //         logs(`下次上班打卡时间 ${start_time}`)
-    //     } else {
-    //         logs(`下次下班打卡时间 ${last_time}`)
-    //     }
+    //     logs(num);
+    //     Work_flow();
+    // }, 1000 * 60 * 3)
+    setInterval(() => {
+        // 每天重置 打卡时间
+        if (moment().format('HH:mm') === '00:01') {
+            start_time = get_start_time();
+            last_time = get_last_time();
+        }
+        if ((new Date().getHours()) < conf.go_hour) {
+            logs(`下次上班打卡时间 ${start_time}`)
+        } else {
+            logs(`下次下班打卡时间 ${last_time}`)
+        }
 
-    //     if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
-    //         start_work_flow();
-    //     } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
-    //         Work_flow();
-    //     }
-    // }, 1000 * 60)
+        if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
+            start_work_flow();
+        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
+            Work_flow();
+        }
+    }, 1000 * 60)
 }
 run();
-
-
-
-
-
-
