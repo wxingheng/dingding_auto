@@ -1,6 +1,6 @@
 {
   "name": "dingding_auto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "钉钉自动打卡",
   "main": "app.js",
   "scripts": {},

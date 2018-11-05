@@ -51,7 +51,7 @@ const random = () => (Math.floor(Math.random() * 15) + 30)
 // const random = () => (1)
 
 const get_start_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.go_hour, 'hour').subtract((random()), 'minute').format('YYYY-MM-DD HH:mm');
-const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((1), 'minute').format('YYYY-MM-DD HH:mm');
+const get_last_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.back_hour, 'hour').add((2), 'minute').format('YYYY-MM-DD HH:mm');
 let default_delay = 1000;
 let start_time = get_start_time();
 let last_time = get_last_time();
@@ -142,7 +142,9 @@ const printscreen = () => {
     delay(() => {
         logs('截图并保存');
         shell.exec(`adb shell screencap -p sdcard/screen${num}.png`);
-        shell.exec(`adb pull sdcard/screen${num}.png E:/study/Electron/Angular-electron/new-hoslink-client-core/DingDingAutoPlayCard/dingding_node/screen`);
+        shell.exec(`adb pull sdcard/screen${num}.png E:/coder/dingding_auto-master/screen`);
+        // shell.exec(`adb pull sdcard/screen${num}.png E:/study/Electron/Angular-electron/new-hoslink-client-core/DingDingAutoPlayCard/dingding_node/screen`);
+
     })
 }
 
@@ -213,6 +215,14 @@ const start_work_flow = function () {
     send_email();
 }
 
+// 周末
+const isWeekend = () => {
+    if(new Date().getDay == 6 || new Date().getDay == 0){
+        return true;
+    }else{
+        return false;
+    }
+}
 
 // start_work_flow();
 const run = () => {
@@ -233,15 +243,16 @@ const run = () => {
             last_time = get_last_time();
         }
         if ((new Date().getHours()) < conf.go_hour) {
-            logs(`下次上班打卡时间 ${start_time}`)
+            logs(`下次上班打卡时间 ${start_time} ${isWeekend()}`)
         } else {
-            logs(`下次下班打卡时间 ${last_time}`)
+            logs(`下次下班打卡时间 ${last_time} ${isWeekend()}`)
         }
-
-        if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
-            start_work_flow();
-        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
-            Work_flow();
+        if(!isWeekend()){
+            if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
+                start_work_flow();
+            } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
+                Work_flow();
+            }
         }
     }, 1000 * 60)
 }

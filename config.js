@@ -1,6 +1,6 @@
 module.exports = {
     // adb 的安装目录
-    directory: 'E:\Universal Adb Driver',
+    directory: 'D:\adb\Universal Adb Driver',
     // 上班时间
     go_hour: 9,
     // 下班时间

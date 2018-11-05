@@ -13,12 +13,10 @@
 windows版本adb下载地址:
 [https://adb.clockworkmod.com/](https://adb.clockworkmod.com/)
 ### 安装完成后，把adb.exe所在文件夹路径加入环境变量Path中。
-![1.添加adb到path](https://github.com/1414044032/imgs/blob/master/adbinstall.png)
-![2.添加adb到path](https://github.com/1414044032/imgs/blob/master/adbpath.png)
-![3.添加adb到path](https://github.com/1414044032/imgs/blob/master/path1.png)
+
 ### 手机需要打开开发者选项，通过USB数据线连接电脑。
 ### 打开CMD命令行，输入“adb devices”,能成功显示手机信息即可。
-![cmdshow](https://github.com/1414044032/imgs/blob/master/adbcmd.png)
+
 
 ## 2.安装node
 ----
@@ -26,23 +24,12 @@ windows版本adb下载地址:
 ## 3.获取屏幕尺寸，设置模拟点击位置：
 可以自己截图 把像素点的位置填写到  config.js 里面
 
-----
-### 像素点的获取：
-----
-![screen1](https://github.com/1414044032/imgs/blob/master/screen1.png)
-![screen2](https://github.com/1414044032/imgs/blob/master/screen2.png)
-### 画图工具打开保存到电脑的设备截图：
-----
-![screen3](https://github.com/1414044032/imgs/blob/master/screen3.png)
-![screen4](https://github.com/1414044032/imgs/blob/master/screen4.png)
-![screen5](https://github.com/1414044032/imgs/blob/master/screen5.png)
 
-
-## 5.运行：  或者用 pm2 挂起
+## 5.运行：  或者用 pm2 挂起 (pm2 start node app.js)
 ----
 运行： 'node app.js'
 ----
-![screen7](https://github.com/1414044032/imgs/blob/master/screen7.png)
+![](https://raw.githubusercontent.com/wxingheng/images/master/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-11-05%20%E4%B8%8B%E5%8D%886.00.53.png)
 
 ## 6.参考资料：
 ----
