@@ -6,16 +6,16 @@ const fs = require('fs');
 const path = require('path');
 const mineType = require('mime-types');
 
-var AipOcrClient = require("baidu-aip-sdk").ocr;
+const AipOcrClient = require("baidu-aip-sdk").ocr;
 // 设置APPID/AK/SK
-var APP_ID = "14617464";
-var API_KEY = "pxUG2m2KBbN9eq9EhZxhaRc2";
-var SECRET_KEY = "kmWAi5qmsIs6aH4GkWHvZVq9bUBKkRAy";
+const APP_ID = "14617464";
+const API_KEY = "pxUG2m2KBbN9eq9EhZxhaRc2";
+const SECRET_KEY = "kmWAi5qmsIs6aH4GkWHvZVq9bUBKkRAy";
 
 // 新建一个对象，建议只保存一个对象调用服务接口
-var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
+const client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
 
-var HttpClient = require("baidu-aip-sdk").HttpClient;
+const HttpClient = require("baidu-aip-sdk").HttpClient;
 
 // 设置request库的一些参数，例如代理服务地址，超时时间等
 // request参数请参考 https://github.com/request/request#requestoptions-callback
@@ -162,8 +162,8 @@ const send_email = () => {
             const v = result.words_result.filter(d => d.words.search('打卡时间') !== -1);
             text = v.map(d => d.words);
             let base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + image;
-            var transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
-            var mailOptions = {
+            const transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
+            const mailOptions = {
                 from: `${conf.email}`, //发信邮箱
                 to: `${conf.email}`, //接收者邮箱
                 subject: "打卡截图", //邮件主题
