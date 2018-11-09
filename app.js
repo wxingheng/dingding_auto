@@ -44,10 +44,10 @@ HttpClient.setRequestInterceptor(function (requestOptions) {
 
 
 
-shell.echo('hello world');
+shell.echo('自动打开已启动...');
 
 
-const random = () => (Math.floor(Math.random() * 15) + 30)
+const random = () => (Math.floor(Math.random() * 15) + 15)
 // const random = () => (1)
 
 const get_start_time = () => moment(moment().format('YYYY-MM-DD')).add(conf.go_hour, 'hour').subtract((random()), 'minute').format('YYYY-MM-DD HH:mm');
@@ -160,8 +160,6 @@ const send_email = () => {
         client.generalBasic(image).then(function (result) {
             // console.log(JSON.stringify(result));
             const v = result.words_result.filter(d => d.words.search('打卡时间') !== -1);
-            console.log(JSON.stringify(result.words_result.filter(d => d.words.search('打卡时间') !== -1)));
-            console.log(JSON.stringify(result.words_result));
             text = v.map(d => d.words);
             let base64 = 'data:' + mineType.lookup(filePath) + ';base64,' + image;
             var transporter = nodemailer.createTransport(`smtps://${conf.email}:${conf.email_token}@smtp.qq.com`);
@@ -178,6 +176,8 @@ const send_email = () => {
                 }
                 logs('Message sent: ' + info.response);
             });
+            start_time = get_start_time();
+            last_time = get_last_time();
         }).catch(function (err) {
             // 如果发生网络错误
             console.log(err);
@@ -217,7 +217,7 @@ const start_work_flow = function () {
 
 // 周末
 const isWeekend = () => {
-    if(new Date().getDay == 6 || new Date().getDay == 0){
+    if(new Date().getDay() == 6 || new Date().getDay() == 0){
         return true;
     }else{
         return false;
@@ -231,11 +231,6 @@ const run = () => {
     } else {
         logs(`下次下班打卡时间 ${last_time}`)
     }
-    // Work_flow();
-    // setInterval(() => {
-    //     logs(num);
-    //     Work_flow();
-    // }, 1000 * 60 * 3)
     setInterval(() => {
         // 每天重置 打卡时间
         if (moment().format('HH:mm') === '00:01') {
@@ -254,6 +249,6 @@ const run = () => {
                 Work_flow();
             }
         }
-    }, 1000 * 60)
+    }, 1000 * 60 * 1)
 }
 run();
