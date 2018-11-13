@@ -6,32 +6,50 @@
 钉钉自动上下班打卡辅助
 ----
 ----
-基于windows10 ,node.6，adb，安卓手机实现。需要安装adb 和node运行环境。原理：通过node逻辑化的调度cmd来执行adb来操作安卓手机。
+基于windows10 ,node.10，adb，安卓手机实现。需要安装adb 和 node运行环境。原理：通过node逻辑化的调度cmd来执行adb来操作安卓手机。
+
+# 准备 windows电脑一台；能装钉钉的安卓手机一部；
 
 ## 1.安装 ADB：
 ----
 windows版本adb下载地址:
 [https://adb.clockworkmod.com/](https://adb.clockworkmod.com/)
 ### 安装完成后，把adb.exe所在文件夹路径加入环境变量Path中。
-
+![1.添加adb到path](https://github.com/1414044032/imgs/blob/master/adbinstall.png)
+![2.添加adb到path](https://github.com/1414044032/imgs/blob/master/adbpath.png)
+![3.添加adb到path](https://github.com/1414044032/imgs/blob/master/path1.png)
 ### 手机需要打开开发者选项，通过USB数据线连接电脑。
 ### 打开CMD命令行，输入“adb devices”,能成功显示手机信息即可。
 
-
 ## 2.安装node
 ----
+windows版本adb下载地址:
+[https://nodejs.org/zh-cn/](https://nodejs.org/zh-cn/)
+### 打开CMD命令行，输入“node -v”,能成功显示手机信息即可。
+
 
 ## 3.获取屏幕尺寸，设置模拟点击位置：
 可以自己截图 把像素点的位置填写到  config.js 里面
 
+----
+### 像素点的获取：
+----
+![screen1](https://github.com/1414044032/imgs/blob/master/screen1.png)
+![screen2](https://github.com/1414044032/imgs/blob/master/screen2.png)
+### 画图工具打开保存到电脑的设备截图：
+----
+![screen3](https://github.com/1414044032/imgs/blob/master/screen3.png)
+![screen4](https://github.com/1414044032/imgs/blob/master/screen4.png)
+![screen5](https://github.com/1414044032/imgs/blob/master/screen5.png)
 
-## 5.运行：  或者用 pm2 挂起 (pm2 start node app.js)
+
+## 4.运行：  或者用 pm2 挂起
 ----
 运行： 'node app.js'
 ----
-![](https://raw.githubusercontent.com/wxingheng/images/master/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202018-11-05%20%E4%B8%8B%E5%8D%886.00.53.png)
+![screen7](https://github.com/1414044032/imgs/blob/master/screen7.png)
 
-## 6.参考资料：
+## 5.参考资料：
 ----
 [https://github.com/1414044032/DingDingAutoPlayCard](https://github.com/1414044032/DingDingAutoPlayCard)
 ----
