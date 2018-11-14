@@ -18,5 +18,9 @@ module.exports = {
     // qq邮箱 打卡成功  将只用qq邮箱给自己发一封邮件
     email: '1228678518@qq.com',
     // 邮箱密钥
-    email_token: 'dzurdbumhdlgichd'
+    email_token: 'dzurdbumhdlgichd',
+    // you devices names
+    devices: '91QEBP8563ST',
+    // screen save path
+    screen_path: 'D:/dingdingdaka/dingding_auto-master/screen'
 }

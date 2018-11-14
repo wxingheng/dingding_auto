@@ -73,7 +73,7 @@ const delay = (fun) => {
 const lighten = () => {
     delay(() => {
         logs('点亮屏幕');
-        shell.exec(`adb shell input keyevent 26  ${conf.directory}`);
+        shell.exec(`adb -s ${conf.devices} shell input keyevent 26  ${conf.directory}`);
     })
 }
 
@@ -81,7 +81,7 @@ const lighten = () => {
 const back_desktop = () => {
     delay(() => {
         logs('返回桌面');
-        shell.exec(`adb shell input keyevent 3  ${conf.directory}`);
+        shell.exec(`adb -s ${conf.devices} shell input keyevent 3  ${conf.directory}`);
     })
 }
 
@@ -89,7 +89,7 @@ const back_desktop = () => {
 const close_dd = () => {
     delay(() => {
         logs('关闭钉钉');
-        shell.exec(`adb shell am force-stop com.alibaba.android.rimet ${conf.directory}`);
+        shell.exec(`adb -s ${conf.devices} shell am force-stop com.alibaba.android.rimet ${conf.directory}`);
     })
 }
 
@@ -97,14 +97,14 @@ const close_dd = () => {
 const open_dd = () => {
     delay(() => {
         logs('打开钉钉');
-        shell.exec(`adb shell monkey -p com.alibaba.android.rimet -c android.intent.category.LAUNCHER 1  ${conf.directory}`);
+        shell.exec(`adb -s ${conf.devices} shell monkey -p com.alibaba.android.rimet -c android.intent.category.LAUNCHER 1  ${conf.directory}`);
     })
 }
 
 // click_imitate 模拟点击
 const click_imitate = (position) => {
     delay(() => {
-        shell.exec(`adb shell input tap ${position.map((d) => d)}`.replace(/,/g, ' '));
+        shell.exec(`adb -s ${conf.devices} shell input tap ${position.map((d) => d)}`.replace(/,/g, ' '));
     })
 }
 // 点击钉钉工作
@@ -141,8 +141,8 @@ const clear_cache = () => {
 const printscreen = () => {
     delay(() => {
         logs('截图并保存');
-        shell.exec(`adb shell screencap -p sdcard/screen${num}.png`);
-        shell.exec(`adb pull sdcard/screen${num}.png E:/coder/dingding_auto-master/screen`);
+        shell.exec(`adb -s ${conf.devices} shell screencap -p sdcard/screen${num}.png`);
+        shell.exec(`adb -s ${conf.devices} pull sdcard/screen${num}.png ${conf.screen_path}`);
         // shell.exec(`adb pull sdcard/screen${num}.png E:/study/Electron/Angular-electron/new-hoslink-client-core/DingDingAutoPlayCard/dingding_node/screen`);
 
     })
