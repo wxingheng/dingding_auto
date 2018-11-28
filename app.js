@@ -233,22 +233,21 @@ const run = () => {
     }
     setInterval(() => {
         // 每天重置 打卡时间
-        if (moment().format('HH:mm') === '00:01') {
+        if (moment().format('HH:mm') === '00:01' || moment().format('HH:mm') === '00:02' || moment().format('HH:mm') === '00:03') {
             start_time = get_start_time();
             last_time = get_last_time();
         }
         if ((new Date().getHours()) < conf.go_hour) {
-            logs(`下次上班打卡时间 ${start_time} ${isWeekend()}`)
+            logs(`下次上班打卡时间 ${start_time}`)
         } else {
-            logs(`下次下班打卡时间 ${last_time} ${isWeekend()}`)
+            logs(`下次下班打卡时间 ${last_time}`)
         }
-        if(!isWeekend()){
-            if (moment().format('YYYY-MM-DD HH:mm') === start_time) {
-                start_work_flow();
-            } else if (moment().format('YYYY-MM-DD HH:mm') === last_time) {
-                Work_flow();
-            }
+
+        if (moment().format('YYYY-MM-DD HH:mm') === start_time || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
+            start_work_flow();
+        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time  || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
+            Work_flow();
         }
-    }, 1000 * 60 * 1)
+    }, 1000 * 60 * 3)
 }
 run();
