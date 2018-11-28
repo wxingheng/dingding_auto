@@ -242,11 +242,12 @@ const run = () => {
         } else {
             logs(`下次下班打卡时间 ${last_time}`)
         }
-
-        if (moment().format('YYYY-MM-DD HH:mm') === start_time || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
-            start_work_flow();
-        } else if (moment().format('YYYY-MM-DD HH:mm') === last_time  || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
-            Work_flow();
+        if(!isWeekend()){
+            if (moment().format('YYYY-MM-DD HH:mm') === start_time || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
+                start_work_flow();
+            } else if (moment().format('YYYY-MM-DD HH:mm') === last_time  || moment().add(1, 'min').format('YYYY-MM-DD HH:mm') === start_time|| moment().add(2, 'min').format('YYYY-MM-DD HH:mm') === start_time) {
+                Work_flow();
+            }
         }
     }, 1000 * 60 * 3)
 }
